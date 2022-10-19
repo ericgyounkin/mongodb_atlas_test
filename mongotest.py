@@ -1,18 +1,6 @@
-# mongodb_atlas_test
-Testing MongoDB Atlas deployment and integration with zarr + xarray.
+# ensure you install dnspython, xarray, pymongo, zarr
+# also need 'conda install -c conda-forge cfgrib'
 
-Using the zarr backend allows for relatively simple xarray operations with the document database backend.
-
-Can be adjusted to support AWS DocumentDB with ideally minimal changes.  I stuck with Atlas as they have a free tier for testing, and there is some talk of issues with not supporting later developments in mongodb.  Could be some potential issues there.
-
-Requires:
-
-dnspython, xarray, pymongo, zarr
-
-also need 'conda install -c conda-forge cfgrib'
-
-
-```python
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import xarray as xr
@@ -24,7 +12,7 @@ import numpy as np
 
 
 # need to register at https://www.mongodb.com/ to get a new database for testing.  Complete the following with your account info to run the rest of this.
-username = 'uname' 
+username = 'uname'
 password = 'pass'
 
 # test using the pymongo module directly, this link provided in the mongodb site
@@ -85,5 +73,3 @@ new_ds.to_zarr(store=store, group='grib_test', append_dim='time')
 load_ds = xr.open_zarr(store=store, group='grib_test')
 assert load_ds.time.size == ds.time.size + 1
 assert np.array_equal(load_ds.time.values, np.concatenate([ds.time.values, new_ds.time.values]))
-
-```
